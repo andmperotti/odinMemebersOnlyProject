@@ -9,9 +9,23 @@ const pool = require("./pool");
 //   return usernameResult.rows[0].name;
 // }
 
-async function saveUser(firstName, lastName, username, hashedPassword) {
-  let values = [firstName, lastName, username, hashedPassword];
+async function saveUser(
+  firstName = "",
+  lastName = "",
+  username,
+  hashedPassword,
+) {
+  let values = [
+    firstName,
+    lastName,
+    username,
+    hashedPassword,
+    (membershipStatus = "beginner"),
+  ];
   let saveUserAttempt = pool.query(
-    'INSERT INTO users (firstName, lastName, userName, passwordHash, membershipStatus) VALUES($1, $2, $3, $4, "beginner") ',
+    "INSERT INTO users (firstName, lastName, userName, passwordHash, membershipStatus) VALUES($1, $2, $3, $4, $5)",
+    values,
   );
 }
+
+module.exports = { saveUser };
