@@ -4,6 +4,8 @@ const indexController = require("../controllers/indexController");
 
 indexRouter.get("/", indexController.getIndex);
 
-indexRouter.get("/sign-up", indexController.signUp);
+indexRouter.get("/sign-up", indexController.getSignUp);
+indexRouter.post("/sign-up", indexController.postSignup);
+
 
 module.exports = { indexRouter };
