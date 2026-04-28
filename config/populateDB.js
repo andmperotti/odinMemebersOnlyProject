@@ -16,9 +16,7 @@ id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY, title TEXT, timestamp DATE,
 async function main() {
   console.log("seeding...");
   const client = new Client({
-    connectionString:
-      "postgresql://drew:<role_password>@localhost:5432/members",
-    // connectionString: process.env.DB_STRING,
+    connectionString: process.env.DB_STRING,
     // ssl: {
     //   rejectUnauthorized: false,
     // },
