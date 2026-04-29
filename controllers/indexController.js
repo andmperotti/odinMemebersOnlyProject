@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const dbQueries = require("../db/queries");
+const { body, validationResult } = require("express-validator");
 
 exports.getIndex = (req, res, next) => {
   res.render("index");
@@ -13,6 +14,9 @@ exports.postSignup = async (req, res, next) => {
   //hash password
   //use db query to save user
   //redirect them to the login page
+
+  //validate user registration entry
+
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     await dbQueries.saveUser(
@@ -35,7 +39,6 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   //some kind of validation of credentials
-
 
   //reroute them to homepage or user homepage/etc
   res.render("index");
