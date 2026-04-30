@@ -1,14 +1,5 @@
 const pool = require("./pool");
 
-// async function getUser(username) {
-//   let values = [username];
-//   let usernameResult = await pool.query(
-//     `SELECT * FROM users WHERE username=$1`,
-//     values,
-//   );
-//   return usernameResult.rows[0].name;
-// }
-
 async function saveUser(
   firstName = "",
   lastName = "",
@@ -28,4 +19,13 @@ async function saveUser(
   );
 }
 
-module.exports = { saveUser };
+async function findUser(username) {
+  let values = [username];
+  let query = await pool.query(
+    "SELECT * FROM users WHERE username = $1",
+    values,
+  );
+  return query.rowCount > 0 ? true : false;
+}
+
+module.exports = { saveUser, findUser };

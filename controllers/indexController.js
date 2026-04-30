@@ -24,13 +24,29 @@ const validateUser = [
     .withMessage("Last name can only contain alphabetic characters")
     .isLength({ min: 1 })
     .withMessage("Last name needs to have a minimum length of 1 character"),
-  body("username").trim().isAlphanumeric().notEmpty("Username cannot be empty"),
+  body("username")
+    .trim()
+    .isAlphanumeric()
+    .notEmpty("Username cannot be empty")
+    //custom validator to check whether a username is already in use
+    .custom(async (value) => {
+      const userFound = await dbQueries.findUser(value);
+      if (userFound) {
+        throw new Error("Username already taken");
+      }
+    }),
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be atl east 6 characters long"),
   body("confirmPassword")
     .isLength({ min: 6 })
-    .withMessage("Password must be atl east 6 characters long"),
+    .withMessage("Password must be atl east 6 characters long")
+    //custom password matching validator for password and confirmPassword fields
+    .custom(async (value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Password field inputs don't match!");
+      }
+    }),
 ];
 
 exports.postSignup = [
@@ -39,9 +55,10 @@ exports.postSignup = [
     //if there are problems with a users input during registration, navigate them to a page that tells them how their input was bad
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .render("errorPage", { title: "Create user", errors: errors.array() });
+      return res.status(400).render("errorPage", {
+        title: "creating user",
+        errors: errors.array(),
+      });
     }
     //hash password
     //use db query to save user
