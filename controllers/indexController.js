@@ -55,7 +55,7 @@ exports.postSignup = [
       console.error(error);
       next(error);
     }
-    //later add a check if username is available/ if this user is not already made, if so then reject their request and alert them
+    //later add a check if username is available/ if this user is not already made, if so then reject their request and alert them -- we'll use a custom validator now to do this
   },
 ];
 
