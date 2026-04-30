@@ -86,3 +86,16 @@ exports.postLogin = (req, res, next) => {
   //reroute them to homepage or user homepage/etc
   res.render("index");
 };
+
+exports.getPasscode = (req, res, next) => {
+  res.render("passcode");
+};
+
+exports.postPasscode = (req, res, next) => {
+  if (req.body.passcodeEntry === "28") {
+    dbQueries.setMember(req.body.username);
+    res.send("Account's membership status upgraded");
+  } else {
+    res.send("Wrong passcode");
+  }
+};

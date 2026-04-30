@@ -28,4 +28,12 @@ async function findUser(username) {
   return query.rowCount > 0 ? true : false;
 }
 
-module.exports = { saveUser, findUser };
+async function setMember(username) {
+  let values = [username];
+  await pool.query(
+    `UPDATE users SET membershipstatus = 'member' WHERE username = $1`,
+    values,
+  );
+}
+
+module.exports = { saveUser, findUser, setMember };

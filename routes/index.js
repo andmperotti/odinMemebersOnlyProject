@@ -10,4 +10,7 @@ indexRouter.post("/sign-up", indexController.postSignup);
 indexRouter.get("/login", indexController.getLogin);
 indexRouter.post("login", indexController.postLogin);
 
+indexRouter.get("/passcode", indexController.getPasscode);
+indexRouter.post("/passcode", indexController.postPasscode);
+
 module.exports = { indexRouter };
