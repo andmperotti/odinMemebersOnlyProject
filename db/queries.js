@@ -25,7 +25,12 @@ async function findUser(username) {
     "SELECT * FROM users WHERE username = $1",
     values,
   );
-  return query.rowCount > 0 ? true : false;
+  return query.rowCount > 0 ? query.rows[0] : false;
+}
+
+async function findUserById(userId) {
+  let query = await pool.query(`SELECT * FROM users WHERE id=$1`, [userId]);
+  return query.rows[0];
 }
 
 async function setMember(username) {
@@ -36,4 +41,18 @@ async function setMember(username) {
   );
 }
 
-module.exports = { saveUser, findUser, setMember };
+async function getUserPasswordHash(username) {
+  const hashReturn = await pool.query(
+    "SELECT passwordhash FROM users where username = $1",
+    [username],
+  );
+  return hashReturn.rows[0].passwordhash;
+}
+
+module.exports = {
+  saveUser,
+  findUser,
+  setMember,
+  findUserById,
+  getUserPasswordHash,
+};
