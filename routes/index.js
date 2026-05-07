@@ -1,16 +1,23 @@
 const { Router } = require("express");
 const indexRouter = Router();
 const indexController = require("../controllers/indexController");
+const passport = require("passport");
 
 indexRouter.get("/", indexController.getIndex);
 
-indexRouter.get("/sign-up", indexController.getSignUp);
-indexRouter.post("/sign-up", indexController.postSignup);
+indexRouter.get("/signup", indexController.getSignUp);
+indexRouter.post("/signup", indexController.postSignup);
 
 indexRouter.get("/login", indexController.getLogin);
-indexRouter.post("login", indexController.postLogin);
+indexRouter.post(
+  "/login",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  indexController.postLogin,
+);
 
 indexRouter.get("/passcode", indexController.getPasscode);
 indexRouter.post("/passcode", indexController.postPasscode);
+
+indexRouter.get("/logout", indexController.getLogOut);
 
 module.exports = { indexRouter };
