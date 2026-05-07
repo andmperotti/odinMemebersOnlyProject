@@ -3,7 +3,7 @@ const dbQueries = require("../db/queries");
 const { body, validationResult, matchedData } = require("express-validator");
 
 exports.getIndex = (req, res, next) => {
-  res.render("index");
+  res.render("index", { user: req.user });
 };
 
 exports.getSignUp = (req, res, next) => {
@@ -81,10 +81,8 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  //some kind of validation of credentials
-
   //reroute them to homepage or user homepage/etc
-  res.render("index");
+  res.render("index", { user: req.user });
 };
 
 exports.getPasscode = (req, res, next) => {
@@ -98,4 +96,13 @@ exports.postPasscode = (req, res, next) => {
   } else {
     res.send("Wrong passcode");
   }
+};
+
+exports.getLogOut = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
 };
