@@ -7,6 +7,11 @@
   </head>
   <body>
     <h1>Hi there</h1>
-    <a href="/sign-up">Sign up</a>
+    <% if(!user){ %>
+    <a style="display: block" href="/signup">Sign up</a>
+    <a style="display: block" href="/login">Log in</a>
+    <% }else{%>
+      <p>Welcome <%=user.username%>!</p>
+    <%}%>
   </body>
 </html>
