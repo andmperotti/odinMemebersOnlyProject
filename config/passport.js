@@ -13,13 +13,12 @@ const verifyCallback = async (username, password, done) => {
 
   await dbQueries
     .findUser(username)
-    .then((user) => {
+    .then(async (user) => {
       if (!user) {
         return done(null, false);
       }
 
-      const isValid = bcrypt.compare(password, hashedUserPassword);
-
+      const isValid = await bcrypt.compare(password, hashedUserPassword);
       if (isValid) {
         return done(null, user);
       } else {
