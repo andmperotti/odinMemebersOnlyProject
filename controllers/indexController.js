@@ -106,3 +106,24 @@ exports.getLogOut = (req, res, next) => {
     res.redirect("/");
   });
 };
+
+exports.getCreateMessage = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.render("createMessage", { user: req.user });
+  } else {
+    res.send(
+      "You are not authenticated, and therefore not allowed to create messages.",
+    );
+  }
+};
+
+exports.postCreateMessage = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    //save users message to db
+    dbQueries.createMessage(req.user.id, req.body.title, req.body.message);
+    //navigate them to the homepage
+    res.render("index", { user: req.user });
+  } else {
+    res.send("You're not authenticated");
+  }
+};
