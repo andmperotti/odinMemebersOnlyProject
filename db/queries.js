@@ -46,7 +46,7 @@ async function getUserPasswordHash(username) {
     "SELECT passwordhash FROM users WHERE username = $1",
     [username],
   );
-  return hashReturn.rows[0].passwordHash;
+  return hashReturn.rowCount > 0 ? hashReturn.rows[0].passwordhash : false;
 }
 
 async function createMessage(userId, title, bodyText) {

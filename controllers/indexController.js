@@ -98,7 +98,7 @@ exports.postPasscode = (req, res, next) => {
   }
 };
 
-exports.getLogOut = (req, res, next) => {
+exports.postLogout = (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);

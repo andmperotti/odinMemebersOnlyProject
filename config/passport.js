@@ -5,14 +5,20 @@ const dbQueries = require("../db/queries");
 const bcrypt = require("bcrypt");
 
 const verifyCallback = async (username, password, done) => {
-  let hashedPassword = await dbQueries.getUserPasswordHash(username);
+  let hashedUserPassword = await dbQueries.getUserPasswordHash(username);
+  //if the user doesn't exist then return false via done()
+  if (hashedUserPassword === false) {
+    return done(null, false);
+  }
+
   await dbQueries
     .findUser(username)
     .then((user) => {
       if (!user) {
         return done(null, false);
       }
-      const isValid = bcrypt.compare(password, hashedPassword);
+
+      const isValid = bcrypt.compare(password, hashedUserPassword);
 
       if (isValid) {
         return done(null, user);
