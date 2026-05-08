@@ -36,23 +36,33 @@ async function findUserById(userId) {
 async function setMember(username) {
   let values = [username];
   await pool.query(
-    `UPDATE users SET membershipstatus = 'member' WHERE username = $1`,
+    `UPDATE users SET membershipStatus = 'member' WHERE username = $1`,
     values,
   );
 }
 
 async function getUserPasswordHash(username) {
   const hashReturn = await pool.query(
-    "SELECT passwordhash FROM users where username = $1",
+    "SELECT passwordHash FROM users where username = $1",
     [username],
   );
-  return hashReturn.rows[0].passwordhash;
+  return hashReturn.rows[0].passwordHash;
 }
 
+async function createMessage(userId, title, bodyText) {
+  //might have to query out the users id using findUserId
+
+  let values = [title, bodyText, userId];
+  const messageCreation = pool.query(
+    "INSERT INTO messages (title, timestamp, bodyText, authorId) VALUES ($1, CURRENT_TIMESTAMP, $2, $3)",
+    values,
+  );
+}
 module.exports = {
   saveUser,
   findUser,
   setMember,
   findUserById,
   getUserPasswordHash,
+  createMessage,
 };
