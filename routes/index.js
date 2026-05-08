@@ -20,4 +20,7 @@ indexRouter.post("/passcode", indexController.postPasscode);
 
 indexRouter.get("/logout", indexController.getLogOut);
 
+indexRouter.get("/createMessage", indexController.getCreateMessage);
+indexRouter.post("/createMessage", indexController.postCreateMessage);
+
 module.exports = { indexRouter };
