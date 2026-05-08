@@ -14,7 +14,7 @@ async function saveUser(
     (membershipStatus = "beginner"),
   ];
   let saveUserAttempt = pool.query(
-    "INSERT INTO users (firstName, lastName, userName, passwordHash, membershipStatus) VALUES($1, $2, $3, $4, $5)",
+    "INSERT INTO users (firstName, lastName, userName, passwordhash, membershipstatus) VALUES($1, $2, $3, $4, $5)",
     values,
   );
 }
@@ -36,14 +36,14 @@ async function findUserById(userId) {
 async function setMember(username) {
   let values = [username];
   await pool.query(
-    `UPDATE users SET membershipStatus = 'member' WHERE username = $1`,
+    `UPDATE users SET membershipstatus = 'member' WHERE username = $1`,
     values,
   );
 }
 
 async function getUserPasswordHash(username) {
   const hashReturn = await pool.query(
-    "SELECT passwordHash FROM users where username = $1",
+    "SELECT passwordhash FROM users WHERE username = $1",
     [username],
   );
   return hashReturn.rows[0].passwordHash;
