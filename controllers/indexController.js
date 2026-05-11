@@ -2,8 +2,15 @@ const bcrypt = require("bcrypt");
 const dbQueries = require("../db/queries");
 const { body, validationResult, matchedData } = require("express-validator");
 
-exports.getIndex = (req, res, next) => {
-  res.render("index", { user: req.user });
+exports.getIndex = async (req, res, next) => {
+  let messages = await dbQueries.getMessages();
+  let users = await dbQueries.getUsers();
+
+  res.render("index", {
+    user: req.user,
+    messages: messages,
+    users: users,
+  });
 };
 
 exports.getSignUp = (req, res, next) => {
@@ -23,8 +30,7 @@ const validateUser = [
     .isAlpha()
     .withMessage("Last name can only contain alphabetic characters")
     .isLength({ min: 1 })
-    .withMessage("Last name needs to have a minimum length of 1 character"),
-  body("username")
+    .withMessage("Last name needs to have a minimum length of 1 character")
     .trim()
     .isAlphanumeric()
     .notEmpty("Username cannot be empty")
@@ -37,14 +43,14 @@ const validateUser = [
     }),
   body("password")
     .isLength({ min: 6 })
-    .withMessage("Password must be atl east 6 characters long"),
+    .withMessage("Password must be at least 6 characters long"),
   body("confirmPassword")
     .isLength({ min: 6 })
-    .withMessage("Password must be atl east 6 characters long")
+    .withMessage("Password must be at least 6 characters long")
     //custom password matching validator for password and confirmPassword fields
     .custom(async (value, { req }) => {
       if (value !== req.body.password) {
-        throw new Error("Password field inputs don't match!");
+        throw new Error("Password field inputs don't match each other!");
       }
     }),
 ];
@@ -82,7 +88,8 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   //reroute them to homepage or user homepage/etc
-  res.render("index", { user: req.user });
+  // res.render("index", { user: req.user });
+  res.redirect("/");
 };
 
 exports.getPasscode = (req, res, next) => {
@@ -122,7 +129,8 @@ exports.postCreateMessage = (req, res, next) => {
     //save users message to db
     dbQueries.createMessage(req.user.id, req.body.title, req.body.message);
     //navigate them to the homepage
-    res.render("index", { user: req.user });
+    // res.render("index", { user: req.user });
+    res.redirect("/");
   } else {
     res.send("You're not authenticated");
   }
