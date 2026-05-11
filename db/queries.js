@@ -58,6 +58,17 @@ async function createMessage(userId, title, bodyText) {
     values,
   );
 }
+
+async function getMessages() {
+  let messages = await pool.query("SELECT * FROM messages ORDER BY id");
+  return messages.rows;
+}
+
+async function getUsers() {
+  let users = await pool.query("SELECT * FROM users ORDER BY id");
+  return users.rows;
+}
+
 module.exports = {
   saveUser,
   findUser,
@@ -65,4 +76,6 @@ module.exports = {
   findUserById,
   getUserPasswordHash,
   createMessage,
+  getMessages,
+  getUsers,
 };
