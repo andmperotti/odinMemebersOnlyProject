@@ -8,34 +8,38 @@
   <body>
     <h1>Message Board</h1>
     <% if(!user){ %>
-      <a style="display: block" href="/signup">Sign up</a>
-      <a style="display: block" href="/login">Log in</a>
+        <a style="display: block" href="/signup">Sign up</a>
+        <a style="display: block" href="/login">Log in</a>
     <% }else{ %>
-      <p>Welcome <%=user.username%>!</p>
-      <a href="/createMessage" style="display: block">Create Message</a>
-      <form action="/logout" method="post"><button>logout</button></form>
+        <p>Welcome <%=user.username%>!</p>
+        <a href="/createMessage" style="display: block">Create Message</a>
+        <form action="/logout" method="post"><button>logout</button></form>
     <% } %>
-    <% if(user && messages){ %>
-      <ul style="list-style-type: none;">
-      <%for(let message of messages){%>
-        <li style="margin-bottom: 1%; border: 1px solid black;">
-          <span style="display: block">Title: <%=message.title%></span>
-          <span style="display: block">Message: <%=message.bodytext%></span>
-          <span style="display: block">Author: <%=users.find((user)=>user.id===message.authorid).username%></span>
-          <span style="display: block">Date: <%=message.timestamp%></span>
-        </li>
-      <%}%>
-      </ul>
-    <% }else{ %>
-      <ul style="list-style-type: none;">
-      <%for(let message of messages){%>
-        <li style="margin-bottom: 1%; border: 1px solid black;">
-          <span style="display: block">Title: <%=message.title%></span>
-          <span style="display: block">Message: <%=message.bodytext%></span>
-        </li>
-      <%}%>
-      </ul>
-    <% } %>
+
+   <%if(messages.length>0){%>
+	<ul>
+		<% messages.forEach(message=>{ %>
+			<li>
+		          <span style="display: block">Title: <%=message.title%></span>
+		          <span style="display: block">Message: <%=message.bodytext%></span>
+				<% if(user){ %>
+		          <span style="display: block">Title: <%=message.title%></span>
+		          <span style="display: block">Message: <%=message.bodytext%></span>
+		          <span style="display: block">Author: <%=users.find((user)=>user.id===message.authorid).username%></span>
+		          <span style="display: block">Date: <%=message.timestamp%></span>
+              <%if(user.admin>0){ %>
+                <form method="post" action="/deleteMessage/<%=message.id%>">
+                  <button>Delete</button>
+                </form>
+              <% } %>
+				<% } %>
+			</li>
+		<% }) %>
+	</ul>
+<%}%>
+<% if(messages.length===0){ %>
+  <span>No messages yet</span> 
+<%}%>
 
   </body>
 </html>
