@@ -23,4 +23,6 @@ indexRouter.post("/logout", indexController.postLogout);
 indexRouter.get("/createMessage", indexController.getCreateMessage);
 indexRouter.post("/createMessage", indexController.postCreateMessage);
 
+indexRouter.post("/deleteMessage/:messageId", indexController.deleteMessage);
+
 module.exports = { indexRouter };
