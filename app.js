@@ -43,5 +43,4 @@ app.use(passport.session());
 //use external router for routes, used after other middleware but before error handler if you have one
 app.use("/", indexRouter);
 
-
 app.listen(process.env.PORT || 3000);
