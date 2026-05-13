@@ -30,7 +30,8 @@ const validateUser = [
     .isAlpha()
     .withMessage("Last name can only contain alphabetic characters")
     .isLength({ min: 1 })
-    .withMessage("Last name needs to have a minimum length of 1 character")
+    .withMessage("Last name needs to have a minimum length of 1 character"),
+  body("username")
     .trim()
     .isAlphanumeric()
     .notEmpty("Username cannot be empty")
@@ -53,6 +54,7 @@ const validateUser = [
         throw new Error("Password field inputs don't match each other!");
       }
     }),
+  body("admin"),
 ];
 
 exports.postSignup = [
@@ -70,9 +72,15 @@ exports.postSignup = [
     //use db query to save user
     //redirect them to the login page
     try {
-      const { firstName, lastName, username } = matchedData(req);
+      const { firstName, lastName, username, admin } = matchedData(req);
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      await dbQueries.saveUser(firstName, lastName, username, hashedPassword);
+      await dbQueries.saveUser(
+        firstName,
+        lastName,
+        username,
+        hashedPassword,
+        admin,
+      );
       res.redirect("/login");
     } catch (error) {
       console.error(error);
@@ -133,5 +141,14 @@ exports.postCreateMessage = (req, res, next) => {
     res.redirect("/");
   } else {
     res.send("You're not authenticated");
+  }
+};
+
+exports.deleteMessage = async (req, res, next) => {
+  if (req.user.admin === true) {
+    await dbQueries.deleteMessage(req.params.messageId);
+    res.redirect("/");
+  } else {
+    res.send("You're not allowed to do that action!");
   }
 };
