@@ -1,20 +1,16 @@
 const pool = require("./pool");
 
-async function saveUser(
-  firstName = "",
-  lastName = "",
-  username,
-  hashedPassword,
-) {
+async function saveUser(firstName, lastName, username, hashedPassword, admin) {
   let values = [
     firstName,
     lastName,
     username,
     hashedPassword,
     (membershipStatus = "beginner"),
+    admin,
   ];
   let saveUserAttempt = pool.query(
-    "INSERT INTO users (firstName, lastName, userName, passwordhash, membershipstatus) VALUES($1, $2, $3, $4, $5)",
+    "INSERT INTO users (firstName, lastName, userName, passwordhash, membershipstatus, admin) VALUES($1, $2, $3, $4, $5, $6)",
     values,
   );
 }
@@ -69,6 +65,12 @@ async function getUsers() {
   return users.rows;
 }
 
+async function deleteMessage(messageid) {
+  let deletionAttempt = await pool.query("DELETE FROM messages WHERE id = $1", [
+    messageid,
+  ]);
+}
+
 module.exports = {
   saveUser,
   findUser,
@@ -78,4 +80,5 @@ module.exports = {
   createMessage,
   getMessages,
   getUsers,
+  deleteMessage,
 };
